@@ -1,0 +1,21 @@
+#!/bin/bash
+for i in `cat serverlist`
+do
+	ssh -i <full path of your RSA PRIVATE KEY> $i 'sudo mkuser gecos="gecos what you are trying to place content " ansibleuser ;sudo mkdir /home/ansibleuser/.ssh ;sudo touch /home/ansibleuser/.ssh/authorized_keys2 ;sudo chown -R ansibleuser:system /home/ansibleuser/.ssh  '
+echo "ansibleuser created on ${i} "
+for i in `cat serverlist`
+do
+	 ssh -i <full path of your RSA PRIVATE KEY> $i 'sudo chmod 757 /home/ansibleuser ;sudo chmod 707 /home/ansibleuser/.ssh ;sudo chmod 606 /home/ansibleuser/.ssh/authorized_keys2 '
+echo "ansibleuser permissions created on ${i} "
+for i in `cat serverlist`
+do
+	ssh -i <full path of your RSA PRIVATE KEY> $i "cat >> /home/ansibleuser/.ssh/authorized_keys2" < (full path of your RSA ansible user pub KEY)
+echo "key copied  ${i} "
+for i in `cat serverlist`
+do
+	ssh -i <full path of your RSA PRIVATE KEY> $i 'sudo chmod 600 /home/ansibleuser/.ssh/authorized_keys2 ;sudo chmod 700 /home/ansibleuser/.ssh ;sudo chmod 755 /home/ansibleuser '	
+echo "again permissions changed to default   ${i} "
+done
+done
+done
+done
